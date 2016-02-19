@@ -99,10 +99,10 @@ class Decider(Actor):
                 if e.error_code == 'UnknownResourceFault':
                     raise DoesNotExistError(
                         "Unable to poll decision task.\n",
-                        e.body['message'],
+                        e.body['Message'],
                     )
 
-                raise ResponseError(e.body['message'])
+                raise ResponseError(e.body['Message'])
 
             token = task.get('taskToken')
             if token is None:
