@@ -129,7 +129,7 @@ class WorkflowTypeQuerySet(BaseWorkflowQuerySet):
             if e.error_code == 'UnknownResourceFault':
                 raise DoesNotExistError(e.body['message'])
 
-            raise ResponseError(e.body['message'])
+            raise ResponseError(e.body['Message'])
 
         wt_info = response[self._infos]
         wt_config = response['configuration']

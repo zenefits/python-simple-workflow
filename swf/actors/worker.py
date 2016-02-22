@@ -53,7 +53,7 @@ class ActivityWorker(Actor):
                     e.body['message']
                 )
 
-                raise ResponseError(e.body['message'])
+                raise ResponseError(e.body['Message'])
 
     def complete(self, task_token, result=None):
         """Responds to ``swf` that the activity task is completed
@@ -76,7 +76,7 @@ class ActivityWorker(Actor):
                     e.body['message']
                 )
 
-            raise ResponseError(e.body['message'])
+            raise ResponseError(e.body['Message'])
 
     def fail(self, task_token, details=None, reason=None):
         """Replies to ``swf`` that the activity task failed
@@ -103,7 +103,7 @@ class ActivityWorker(Actor):
                     e.body['message']
                 )
 
-            raise ResponseError(e.body['message'])
+            raise ResponseError(e.body['Message'])
 
     def heartbeat(self, task_token, details=None):
         """Records activity task heartbeat
@@ -126,7 +126,7 @@ class ActivityWorker(Actor):
                     e.body['message']
                 )
 
-            raise ResponseError(e.body['message'])
+            raise ResponseError(e.body['Message'])
 
     def poll(self, task_list=None, identity=None):
         """Polls for an activity task to process from current
@@ -166,7 +166,7 @@ class ActivityWorker(Actor):
                     e.body['message']
                 )
 
-            raise ResponseError(e.body['message'])
+            raise ResponseError(e.body['Message'])
 
         if not 'taskToken' in polled_activity_data:
             raise PollTimeout("Activity Worker poll timed out")

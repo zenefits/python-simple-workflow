@@ -50,7 +50,7 @@ class Decider(Actor):
                     e.body['message']
                 )
 
-            raise ResponseError(e.body['message'])
+            raise ResponseError(e.body['Message'])
 
     def poll(self, task_list=None,
              identity=None,
@@ -99,7 +99,7 @@ class Decider(Actor):
                 if e.error_code == 'UnknownResourceFault':
                     raise DoesNotExistError(
                         "Unable to poll decision task.\n",
-                        e.body['Message'],
+                        e.body['message'],
                     )
 
                 raise ResponseError(e.body['Message'])

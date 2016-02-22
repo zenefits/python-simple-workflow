@@ -208,6 +208,9 @@ class WorkflowType(BaseModel):
             if e.error_code == 'UnknownResourceFault':
                 raise DoesNotExistError(e.body['message'])
 
+            raise ResponseError(e.body['Message'])
+
+
     def delete(self):
         """Deprecates the workflow type amazon-side"""
         try:
@@ -215,6 +218,9 @@ class WorkflowType(BaseModel):
         except SWFResponseError as e:
             if e.error_code in ['UnknownResourceFault', 'TypeDeprecatedFault']:
                 raise DoesNotExistError(e.body['message'])
+
+            raise ResponseError(e.body['Message'])
+
 
     def upstream(self):
         from swf.querysets.workflow import WorkflowTypeQuerySet
