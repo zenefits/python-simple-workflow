@@ -454,6 +454,8 @@ class WorkflowExecution(BaseModel):
         :rtype: swf.models.event.History
         """
         domain = kwargs.pop('domain', self.domain)
+        max_page_hoops = kwargs.pop('maxPageHoops', None)
+
         if not isinstance(domain, basestring):
             domain = domain.name
 
@@ -466,6 +468,8 @@ class WorkflowExecution(BaseModel):
 
         events = response['events']
         next_page = response.get('nextPageToken')
+        page_count = 1;
+
         while next_page is not None:
             response = self.connection.get_workflow_execution_history(
                 self.domain.name,
@@ -478,7 +482,12 @@ class WorkflowExecution(BaseModel):
             events.extend(response['events'])
             next_page = response.get('nextPageToken')
 
+            page_count = page_count + 1
+            if max_page_hoops != None and page_count >=  max_page_hoops:
+                break
+
         return History.from_event_list(events)
+
 
     @exceptions.translate(SWFResponseError,
                           to=ResponseError)
