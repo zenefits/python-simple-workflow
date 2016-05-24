@@ -36,6 +36,8 @@ class ConnectedSWFObject(object):
                        kwargs.get('region') or
                        boto.swf.layer1.Layer1.DefaultRegionName)
 
+        settings_['is_secure'] = SETTINGS.get('is_secure', True)
+
         self.connection = (kwargs.pop('connection', None) or
                            boto.swf.connect_to_region(self.region, **settings_))
         if self.connection is None:
