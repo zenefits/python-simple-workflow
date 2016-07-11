@@ -12,7 +12,7 @@ import collections
 from boto.swf.exceptions import SWFResponseError, SWFTypeAlreadyExistsError
 
 from swf.constants import REGISTERED
-from swf.utils import immutable
+from swf.utils import immutable, Timer
 from swf.models import BaseModel, Domain
 from swf.models.history import History
 from swf.models.base import ModelDiff
@@ -263,18 +263,19 @@ class WorkflowType(BaseModel):
         child_policy = child_policy or self.child_policy
         input = json.dumps(input) or None
 
-        run_id = self.connection.start_workflow_execution(
-            self.domain.name,
-            workflow_id,
-            self.name,
-            self.version,
-            task_list=task_list,
-            child_policy=child_policy,
-            execution_start_to_close_timeout=execution_timeout,
-            input=input,
-            tag_list=tag_list,
-            task_start_to_close_timeout=decision_tasks_timeout,
-        )['runId']
+        with Timer('start_workflow_execution'):
+            run_id = self.connection.start_workflow_execution(
+                self.domain.name,
+                workflow_id,
+                self.name,
+                self.version,
+                task_list=task_list,
+                child_policy=child_policy,
+                execution_start_to_close_timeout=execution_timeout,
+                input=input,
+                tag_list=tag_list,
+                task_start_to_close_timeout=decision_tasks_timeout,
+            )['runId']
 
         return WorkflowExecution(self.domain, workflow_id, run_id=run_id)
 

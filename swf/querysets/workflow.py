@@ -12,7 +12,7 @@ from swf.querysets.base import BaseQuerySet
 from swf.models import Domain
 from swf.models.workflow import (WorkflowType, WorkflowExecution,
                                  CHILD_POLICIES)
-from swf.utils import datetime_timestamp, past_day, get_subkey
+from swf.utils import datetime_timestamp, past_day, get_subkey, Timer
 from swf.exceptions import (ResponseError, DoesNotExistError,
                             InvalidKeywordArgumentError, AlreadyExistsError)
 
@@ -124,7 +124,8 @@ class WorkflowTypeQuerySet(BaseWorkflowQuerySet):
             }
         """
         try:
-            response = self.connection.describe_workflow_type(self.domain.name, name, version)
+            with Timer('describe_workflow_type'):
+                response = self.connection.describe_workflow_type(self.domain.name, name, version)
         except SWFResponseError as e:
             if e.error_code == 'UnknownResourceFault':
                 raise DoesNotExistError(e.body['message'])

@@ -8,8 +8,11 @@
 from datetime import datetime, timedelta
 from time import mktime
 from itertools import chain, izip, islice
+import time
 
 from functools import wraps
+
+import logging
 
 # De-capitalize a string (lower first character)
 decapitalize = lambda s: s[:1].lower() + s[1:] if s else ''
@@ -216,3 +219,17 @@ def underscore_to_camel(string):
                           c != '_' else '' for p, c in
                           izip(islice(string, 0, None),
                                islice(string, 1, None)))))
+
+
+class Timer:
+    def __init__(self, name):
+        self.name = name
+
+    def __enter__(self):
+        self.start = time.clock()
+        return self
+
+    def __exit__(self, *args):
+        self.end = time.clock()
+        self.interval = self.end - self.start
+        logging.info('[SWF] Request %s has taken %.03f seconds.' % (self.name, self.interval))
