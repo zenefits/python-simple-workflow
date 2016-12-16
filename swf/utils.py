@@ -14,6 +14,8 @@ from functools import wraps
 
 import logging
 
+logger = logging.getLogger(__name__)
+
 # De-capitalize a string (lower first character)
 decapitalize = lambda s: s[:1].lower() + s[1:] if s else ''
 
@@ -221,6 +223,17 @@ def underscore_to_camel(string):
                                islice(string, 1, None)))))
 
 
+def get_message_from_response(response):
+    if 'message' in response:
+        return response['message']
+
+    if 'Message' in response:
+        return response['Message']
+
+    logger.error('[SWF] Cannot read message from response body %s' % response)
+
+    return ''
+
 class Timer:
     def __init__(self, name):
         self.name = name
@@ -232,4 +245,6 @@ class Timer:
     def __exit__(self, *args):
         self.end = time.clock()
         self.interval = self.end - self.start
-        logging.info('[SWF] Request %s has taken %.03f seconds.' % (self.name, self.interval))
+        logger.info('[SWF] Request %s has taken %.03f seconds.' % (self.name, self.interval))
+
+

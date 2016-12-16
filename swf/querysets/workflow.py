@@ -12,7 +12,7 @@ from swf.querysets.base import BaseQuerySet
 from swf.models import Domain
 from swf.models.workflow import (WorkflowType, WorkflowExecution,
                                  CHILD_POLICIES)
-from swf.utils import datetime_timestamp, past_day, get_subkey, Timer
+from swf.utils import datetime_timestamp, past_day, get_subkey, Timer, get_message_from_response
 from swf.exceptions import (ResponseError, DoesNotExistError,
                             InvalidKeywordArgumentError, AlreadyExistsError)
 
@@ -127,10 +127,11 @@ class WorkflowTypeQuerySet(BaseWorkflowQuerySet):
             with Timer('describe_workflow_type'):
                 response = self.connection.describe_workflow_type(self.domain.name, name, version)
         except SWFResponseError as e:
+            msg = get_message_from_response(e.body)
             if e.error_code == 'UnknownResourceFault':
-                raise DoesNotExistError(e.body['message'])
+                raise DoesNotExistError(msg)
 
-            raise ResponseError(e.body['Message'])
+            raise ResponseError(msg)
 
         wt_info = response[self._infos]
         wt_config = response['configuration']
@@ -470,10 +471,12 @@ class WorkflowExecutionQuerySet(BaseWorkflowQuerySet):
                 run_id,
                 workflow_id)
         except SWFResponseError as e:
-            if e.error_code == 'UnknownResourceFault':
-                raise DoesNotExistError(e.body['message'])
+            msg = get_message_from_response(e.body)
 
-            raise ResponseError(e.body['message'])
+            if e.error_code == 'UnknownResourceFault':
+                raise DoesNotExistError(msg)
+
+            raise ResponseError(msg)
 
         execution_info = response[self._infos]
         execution_config = response['executionConfiguration']

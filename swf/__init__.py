@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-version = (0, 1, 56, 6)
+version = (0, 1, 56, 7)
 
 __title__ = "python-simple-workflow"
 __author__ = "Oleiade"
