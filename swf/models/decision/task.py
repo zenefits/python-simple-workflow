@@ -29,7 +29,7 @@ class ActivityTaskDecision(Decision):
                  control=None, heartbeat_timeout=None,
                  input=None, duration_timeout=None,
                  schedule_timeout=None, task_timeout=None,
-                 task_list=None):
+                 task_list=None, task_priority=None):
         """Schedule activity task decision builder
 
         :param  activity_id: activity id of the activity task
@@ -74,4 +74,5 @@ class ActivityTaskDecision(Decision):
             'scheduleToStartTimeout': schedule_timeout,
             'startToCloseTimeout': task_timeout,
             'taskList': {'name': task_list},
+            'taskPriority': task_priority,
         })
