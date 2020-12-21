@@ -26,9 +26,9 @@ setup(
     keywords='amazon simple wokflow swf python',
     zip_safe=True,
     install_requires=[
-        'boto==2.9.7',
-        'mock==1.0.1',
-        'xworkflows==1.0.0',
+        'boto>=2.9.7',
+        'mock>=1.0.1',
+        'xworkflows>=1.0.0',
     ],
 
     package_dir={'': '.'},
